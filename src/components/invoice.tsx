@@ -1,15 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Paper
-} from "@mui/material";
+import { Button } from "@mui/material";
 
 interface Invoice {
   id: number;
@@ -34,7 +25,6 @@ export default function InvoiceApp() {
   });
 
   const [invoices, setInvoices] = useState<Invoice[]>([]);
-
   const [editId, setEditId] = useState<number | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +32,6 @@ export default function InvoiceApp() {
     const newValue = value === "" ? 0 : Number(value);
 
     const newForm = { ...form, [name]: newValue };
-
     const subtotal = newForm.qty * newForm.price;
 
     if (name === "discount") {
@@ -61,15 +50,12 @@ export default function InvoiceApp() {
     }
 
     newForm.total = afterDiscount + newForm.tax;
-
     setForm(newForm);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (editId !== null) {
-      // Update existing invoice
       setInvoices(
         invoices.map((inv) =>
           inv.id === editId ? { ...form, id: editId } : inv
@@ -77,11 +63,8 @@ export default function InvoiceApp() {
       );
       setEditId(null);
     } else {
-      // Add new invoice
       setInvoices([...invoices, { ...form, id: Date.now() }]);
     }
-
-    // Reset form
     setForm({
       qty: 0,
       price: 0,
@@ -99,107 +82,179 @@ export default function InvoiceApp() {
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>{editId !== null ? "Edit Invoice" : "New Invoice"}</h2>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl mx-auto">
+        <h2 className="text-2xl font-bold text-center mb-6">
+          {editId !== null ? "Edit Invoice" : "New Invoice"}
+        </h2>
 
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Quantity"
-          name="qty"
-          value={form.qty}
-          onChange={handleInputChange}
-          type="number"
-          style={{ margin: 8 }}
-        />
-        <TextField
-          label="Price"
-          name="price"
-          value={form.price}
-          onChange={handleInputChange}
-          type="number"
-          style={{ margin: 8 }}
-        />
-        <TextField
-          label="Discount %"
-          name="discountPercent"
-          value={form.discountPercent}
-          onChange={handleInputChange}
-          type="number"
-          style={{ margin: 8 }}
-        />
-        <TextField
-          label="Discount Amount"
-          name="discount"
-          value={form.discount}
-          onChange={handleInputChange}
-          type="number"
-          style={{ margin: 8 }}
-        />
-        <TextField
-          label="Tax %"
-          name="taxPercent"
-          value={form.taxPercent}
-          onChange={handleInputChange}
-          type="number"
-          style={{ margin: 8 }}
-        />
-        <TextField
-          label="Tax Amount"
-          name="tax"
-          value={form.tax}
-          onChange={handleInputChange}
-          type="number"
-          style={{ margin: 8 }}
-        />
-        <TextField
-          label="Total"
-          value={form.total.toFixed(2)}
-          type="number"
-          style={{ margin: 8 }}
-          disabled
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          style={{ margin: 8 }}
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded-lg shadow-md mb-6"
         >
-          {editId !== null ? "Update" : "Save"}
-        </Button>
-      </form>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Quantity
+              </label>
+              <input
+                name="qty"
+                value={form.qty}
+                onChange={handleInputChange}
+                type="number"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Price
+              </label>
+              <input
+                name="price"
+                value={form.price}
+                onChange={handleInputChange}
+                type="number"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Discount %
+              </label>
+              <input
+                name="discountPercent"
+                value={form.discountPercent}
+                onChange={handleInputChange}
+                type="number"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Discount
+              </label>
+              <input
+                name="discount"
+                value={form.discount}
+                onChange={handleInputChange}
+                type="number"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Tax %
+              </label>
+              <input
+                name="taxPercent"
+                value={form.taxPercent}
+                onChange={handleInputChange}
+                type="number"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Tax
+              </label>
+              <input
+                name="tax"
+                value={form.tax}
+                onChange={handleInputChange}
+                type="number"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Total
+              </label>
+              <input
+                value={form.total.toFixed(2)}
+                type="number"
+                disabled
+                className="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm"
+              />
+            </div>
+            <div className="flex items-end">
+              <Button
+                type="submit"
+                variant="contained"
+                className="w-full bg-indigo-600 hover:bg-indigo-700"
+              >
+                {editId !== null ? "Update" : "Save"}
+              </Button>
+            </div>
+          </div>
+        </form>
 
-      <Paper style={{ marginTop: 20 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Qty</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Disc %</TableCell>
-              <TableCell>Discount</TableCell>
-              <TableCell>Tax %</TableCell>
-              <TableCell>Tax</TableCell>
-              <TableCell>Total</TableCell>
-              <TableCell>Edit</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {invoices.map((invoice) => (
-              <TableRow key={invoice.id}>
-                <TableCell>{invoice.qty}</TableCell>
-                <TableCell>{invoice.price}</TableCell>
-                <TableCell>{invoice.discountPercent}</TableCell>
-                <TableCell>{invoice.discount.toFixed(2)}</TableCell>
-                <TableCell>{invoice.taxPercent}</TableCell>
-                <TableCell>{invoice.tax.toFixed(2)}</TableCell>
-                <TableCell>{invoice.total.toFixed(2)}</TableCell>
-                <TableCell>
-                  <Button onClick={() => startEditing(invoice)}>Edit</Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
+        <div className="bg-white rounded-lg shadow-md overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Qty
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Price
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Disc %
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Discount
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Tax %
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Tax
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Total
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Edit
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {invoices.map((invoice) => (
+                <tr key={invoice.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">{invoice.qty}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {invoice.price}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {invoice.discountPercent}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {invoice.discount.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {invoice.taxPercent}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {invoice.tax.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {invoice.total.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Button
+                      onClick={() => startEditing(invoice)}
+                      variant="outlined"
+                      className="border-indigo-600 text-indigo-600 hover:bg-indigo-50"
+                    >
+                      Edit
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
